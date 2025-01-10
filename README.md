@@ -24,7 +24,7 @@
 
 ---
 
-**英文版本**
+**English**
 
 How do I use it?
 
