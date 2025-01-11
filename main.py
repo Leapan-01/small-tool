@@ -6,6 +6,36 @@ from tkinter import ttk
 from collections import defaultdict
 import threading
 import sys
+import ctypes
+from ctypes import wintypes
+
+# 调用 Windows API 的 SHFileOperation
+FO_DELETE = 0x0003
+FOF_ALLOWUNDO = 0x0040
+FOF_NOCONFIRMATION = 0x0010
+
+class SHFILEOPSTRUCT(ctypes.Structure):
+    _fields_ = [
+        ("hwnd", wintypes.HWND),
+        ("wFunc", ctypes.c_uint),
+        ("pFrom", wintypes.LPCWSTR),
+        ("pTo", wintypes.LPCWSTR),
+        ("fFlags", ctypes.c_uint),
+        ("fAnyOperationsAborted", wintypes.BOOL),
+        ("hNameMappings", wintypes.LPVOID),
+        ("lpszProgressTitle", wintypes.LPCWSTR),
+    ]
+
+def move_to_recycle_bin(file_path):
+    """将文件移到回收站"""
+    file_operation = SHFILEOPSTRUCT()
+    file_operation.wFunc = FO_DELETE
+    file_operation.pFrom = file_path + '\0'
+    file_operation.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION
+
+    result = ctypes.windll.shell32.SHFileOperationW(ctypes.byref(file_operation))
+    if result != 0:
+        raise Exception(f"Failed to delete file {file_path}. Error code: {result}")
 
 def resource_path(relative_path):
     """获取资源文件的路径"""
@@ -22,6 +52,8 @@ class DuplicateFileFinder:
         """扫描指定目录中的文件"""
         total_files = sum([len(files) for _, _, files in os.walk(directory)])  # 计算总文件数
         scanned_files = 0
+        self.files_dict.clear()  # 清空之前的文件记录，防止错误重复
+        self.files_to_delete.clear()  # 清空重复文件记录
         
         for root, dirs, files in os.walk(directory):
             for file in files:
@@ -57,9 +89,10 @@ class DuplicateFileFinder:
                 self.files_to_delete.append(paths)
 
     def delete_file(self, file_path, progress_callback=None):
-        """删除文件"""
+        """将文件移动到回收站"""
         try:
-            os.remove(file_path)
+            move_to_recycle_bin(file_path)
+            print(f"文件已移动到回收站：{file_path}")
         except Exception as e:
             print(f"无法删除文件 {file_path}：{e}")
             return False
@@ -73,7 +106,7 @@ class DuplicateFileApp:
         self.root.title("NoRedo")
         
         # 调整初始窗口大小
-        self.root.geometry("900x700")  # 增大窗口大小
+        self.root.geometry("800x700")  # 增大窗口大小
         self.root.resizable(True, True)  # 允许用户调整窗口大小
 
         self.finder = DuplicateFileFinder()
@@ -91,7 +124,7 @@ class DuplicateFileApp:
     def create_widgets(self):
         """创建界面控件"""
         # 扫描按钮
-        self.scan_button = tk.Button(self.root, text="选择文件夹扫描重复文件", command=self.scan_folder)
+        self.scan_button = tk.Button(self.root, text="选择文件夹", command=self.scan_folder)
         self.scan_button.pack(pady=20)
 
         # 重复文件列表
@@ -192,7 +225,7 @@ class DuplicateFileApp:
             "更新网址：\nhttps://github.com/Leapan-01/small-tool\n\n"
             "博客网址：\nhttps://www.lp-gardenwalk.top\n\n"
             "Bug反馈：lp-gardenwalk@outlook.com\n\n"
-            "版本号：V1.0.0"
+            "版本号：V1.0.1"
         )
 
         label = tk.Label(about_window, text=about_text, justify="left", font=("Arial", 10))
