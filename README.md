@@ -6,9 +6,9 @@
 
 ## 如何使用？
 
-- **扫描**：启动程序，进行文件扫描。
-- **选择文件**：在扫描结果中选择你想要删除的文件。
-- **删除文件**：点击删除按钮，完成文件删除到回收站。
+- **扫描**
+- **选择文件**
+- **删除文件**
 
 整个过程简单明了：**扫描 → 选择文件 → 删除文件到回收站**。
 
@@ -29,9 +29,9 @@
 How do I use it?
 
 Just follow these steps:
-- **Scan**: Start the program and scan for files.
-- **Select File**: Choose the file you want to delete from the scan results.
-- **Delete File**: Click the delete button to complete the deletion.
+- **Scan**: 
+- **Select File**: 
+- **Delete File**: 
 
 The whole process is simple: **Scan → Select File → Delete File**.
 
