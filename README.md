@@ -2,8 +2,6 @@
 
 <img src="https://www.lp-gardenwalk.top/wp-content/uploads/2024/03/cropped-1710345033-bg_bggenerator_com-1.png" alt="logo" width="200" height="200">
 
-# 使用说明
-
 ## 如何使用？
 
 - **扫描**
