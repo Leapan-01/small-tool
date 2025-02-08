@@ -24,12 +24,10 @@
 
 **English**
 
-How do I use it?
-
 Just follow these steps:
-- **Scan**: 
-- **Select File**: 
-- **Delete File**: 
+- **Scan**
+- **Select File**
+- **Delete File**
 
 It's as simple as that 
 
