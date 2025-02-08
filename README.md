@@ -10,7 +10,7 @@
 - **选择文件**
 - **删除文件**
 
-整个过程简单明了：**扫描 → 选择文件 → 删除文件到回收站**。
+就是这么简单
 
 ## 原理是什么？
 
@@ -33,7 +33,7 @@ Just follow these steps:
 - **Select File**: 
 - **Delete File**: 
 
-The whole process is simple: **Scan → Select File → Delete File**.
+It's as simple as that 
 
 Principle?
 
