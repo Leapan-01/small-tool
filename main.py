@@ -104,46 +104,48 @@ class DuplicateFileApp:
     def __init__(self, root):
         self.root = root
         self.root.title("NoRedo")
-        
-        # 调整初始窗口大小
-        self.root.geometry("800x700")  # 增大窗口大小
-        self.root.resizable(True, True)  # 允许用户调整窗口大小
+        self.root.geometry("800x700")
+        self.root.configure(bg="#f4f4f4")  # 设置背景色
 
         self.finder = DuplicateFileFinder()
 
-        # 调整图标加载方式
-        self.icon_path = resource_path('icon.ico')
-        try:
-            self.root.iconbitmap(self.icon_path)  # 使用嵌入的图标文件
-        except Exception as e:
-            print(f"图标设置失败：{e}")
-        
+        # 设置窗口图标
+        self.root.iconbitmap(resource_path('icon.ico'))
+
+        # 设置按钮样式
+        style = ttk.Style()
+        style.configure("TButton", padding=10, relief="flat", background="#4CAF50", foreground="black", borderwidth=2)
+        style.map("TButton", background=[('active', '#45a049')])
+
+        # 设置进度条样式
+        style.configure("TProgressbar", thickness=30, background="#4CAF50")
+
         # UI布局
         self.create_widgets()
 
     def create_widgets(self):
         """创建界面控件"""
-        # 扫描按钮
-        self.scan_button = tk.Button(self.root, text="选择文件夹", command=self.scan_folder)
+        # 使用ttk.Button
+        self.scan_button = ttk.Button(self.root, text="选择文件夹", command=self.scan_folder, style="TButton")
         self.scan_button.pack(pady=20)
 
-        # 重复文件列表
+        # 文件列表框
         self.file_listbox = tk.Listbox(self.root, width=100, height=20)
         self.file_listbox.pack(padx=10, pady=10)
 
         # 删除按钮
-        self.delete_button = tk.Button(self.root, text="删除选中的文件", command=self.delete_selected)
+        self.delete_button = ttk.Button(self.root, text="删除选中的文件", command=self.delete_selected, style="TButton")
         self.delete_button.pack(pady=10)
 
         # 进度条
-        self.progress_label = tk.Label(self.root, text="扫描进度：")
+        self.progress_label = tk.Label(self.root, text="扫描进度：", bg="#f4f4f4")
         self.progress_label.pack(pady=5)
         
-        self.progressbar = ttk.Progressbar(self.root, orient="horizontal", length=600, mode="determinate")
+        self.progressbar = ttk.Progressbar(self.root, orient="horizontal", length=600, mode="determinate", style="TProgressbar")
         self.progressbar.pack(pady=10)
 
         # 关于按钮
-        self.about_button = tk.Button(self.root, text="关于", command=self.show_about)
+        self.about_button = ttk.Button(self.root, text="关于", command=self.show_about, style="TButton")
         self.about_button.pack(pady=10)
 
         # 确保点击关闭时退出程序
@@ -219,19 +221,23 @@ class DuplicateFileApp:
         about_window = tk.Toplevel(self.root)
         about_window.title("关于")
         about_window.geometry("500x400")
+        about_window.configure(bg="#ffffff")
+
+        # 设置关于窗口图标
+        about_window.iconbitmap(resource_path('icon.ico'))
 
         about_text = (
             "作者：Leapan\n"
-            "更新网址：\nhttps://github.com/Leapan-01/small-tool\n\n"
+            "更新网址：\nhttps://github.com/Leapan-01/NoRedo\n\n"
             "博客网址：\nhttps://www.lp-gardenwalk.top\n\n"
             "Bug反馈：lp-gardenwalk@outlook.com\n\n"
-            "版本号：V1.0.1"
+            "版本号：V1.1.0"
         )
 
-        label = tk.Label(about_window, text=about_text, justify="left", font=("Arial", 10))
-        label.pack(padx=10, pady=10)
+        label = tk.Label(about_window, text=about_text, justify="left", bg="#ffffff")
+        label.pack(padx=20, pady=20)
 
-        close_button = tk.Button(about_window, text="关闭", command=about_window.destroy)
+        close_button = ttk.Button(about_window, text="关闭", command=about_window.destroy, style="TButton")
         close_button.pack(pady=5)
 
 def main():
